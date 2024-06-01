@@ -60,6 +60,7 @@
         const username = prompt("Please enter your name .. ");
         const socket = io('http://localhost:9000');
         socket.emit('userLogin', username);
+
         document.getElementById('send').addEventListener('click', () => {
             const message = document.getElementById('message').value;
             if (message.trim()) {
@@ -73,14 +74,16 @@
             const isUserMessage = data.user === username;
             const messageClass = isUserMessage ? 'message-user' : 'message-other';
             const time = new Date().toLocaleTimeString();
+            const messageText = typeof data.text === 'string' ? data.text : data.text.text;
 
             chatbox.innerHTML += `
                 <div class="message ${isUserMessage ? 'text-end' : ''}">
                     <div class="message-content ${messageClass}">
-                        <strong>${data.user}</strong>: ${data.text}
-                        <div class="message-time">${time}</div>
+                        ${messageText}
+                        <div class="message-time text-light">${time}</div>
                     </div>
                 </div>`;
+            console.log(data);
             chatbox.scrollTop = chatbox.scrollHeight;
         });
 
